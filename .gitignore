@@ -1,0 +1,6 @@
+*.odt
+*.dat
+*.pdf
+*.txt
+*.pem
+node_module
