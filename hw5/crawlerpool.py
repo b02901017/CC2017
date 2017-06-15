@@ -4,6 +4,7 @@ import urllib.parse
 import time 
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
+import json
 
 INDEX = 'https://www.ptt.cc/bbs/movie/index.html'
 
@@ -26,8 +27,11 @@ class pttcrawler:
                 push = '0'
             title = str(meta.getText().strip())
             if title.startswith("Re: "):
-                title = title[4:].split("]")[1]
-                catagory = "Reply"
+                try:
+                    title = title[4:].split("]")[1]
+                    catagory = "Reply"
+                except:
+                    pass
             else :
                 title = title.split("]")
                 if len(title) > 1:
@@ -90,12 +94,13 @@ class pttcrawler:
 
 
 if __name__ == '__main__':
-    mycrawler = pttcrawler(20,INDEX)
+    mycrawler = pttcrawler(5,INDEX)
     start = time.time()
     mycrawler.run()
-    print(mycrawler.posts)
-    # print('花費: %f 秒' % (time.time() - start))
-    # print('共%d項結果：' % len(mycrawler.posts))
+    print('花費: %f 秒' % (time.time() - start))
+    print('共%d項結果：' % len(mycrawler.posts))
     # for p in mycrawler.posts:
     #     print('{0} {1} {2} {3: <15} {4}, 網頁內容共 {5} 字'.format(
-    #             p['Push'], p['Category'],p['Date'], p['Author'], p['Title'], len(p['Content'])))
+    #             p['Push'], p['Category'],p['Date'], p['Author'], p['Title'], p['Content']))
+    f = open("data.json",'w')
+    json.dump(mycrawler.posts, f)

@@ -30,8 +30,11 @@ class pttcrawler:
                 push = '0'
             title = str(meta.getText().strip())
             if title.startswith("Re: "):
-                title = title[4:].split("]")[1]
-                catagory = "Reply"
+                try:
+                    title = title[4:].split("]")[1]
+                    catagory = "Reply"
+                except:
+                    pass
             else :
                 title = title.split("]")
                 if len(title) > 1:
@@ -41,12 +44,12 @@ class pttcrawler:
                     catagory = "Remove" 
                     title = title[0]
             posts.append({
-                'Title': title.decode('utf8'),
+                'Title': title,
                 'Link': meta.get('href'),
-                "Category" : catagory.decode('utf8'),
-                'Push': push.decode('utf8'),
-                'Date': article.find('div', 'date').getText().decode('utf8'),
-                'Author': article.find('div', 'author').getText().decode('utf8'),
+                "Category" : catagory,
+                'Push': push,
+                'Date': article.find('div', 'date').getText(),
+                'Author': article.find('div', 'author').getText(),
 
             })
             
@@ -74,7 +77,7 @@ class pttcrawler:
 
     def get_articles(self, metadata):
         post_links = [meta['Link'] for meta in metadata]
-	contents = map(self.fetch_article_content, post_links)
+	    contents = map(self.fetch_article_content, post_links)
         return contents
 
     def fetch_article_content(self, link):

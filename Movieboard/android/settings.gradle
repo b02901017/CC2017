@@ -1,0 +1,3 @@
+rootProject.name = 'Movieboard'
+
+include ':app'

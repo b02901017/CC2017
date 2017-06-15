@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -
 from pymongo import MongoClient
 import crawler
+import time 
 INDEX = 'https://www.ptt.cc/bbs/movie/index.html'
 if __name__ == "__main__":
     client = MongoClient('mongodb://chentp6vu3jp6:' + "tp6vu3jp6" + '@127.0.0.1/tracking?authSource=admin')
