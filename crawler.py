@@ -24,7 +24,7 @@ class moviecrawler:
         data = list()
         for movie in soup.find_all('div', 'mmMdbModelOut'):
             title = movie.find('div', 'mdbTitle').find('h2').getText().replace(' ','')
-            temp = movie.find('div', 'mainBread').find_all('p')
+            temp = movie.find('div', 'mainBread')
             tags = movie.find('div', 'mainBread').find_all('a')
             img = movie.find('div', 'mainIntrol').find('img')['src']
             
@@ -35,12 +35,14 @@ class moviecrawler:
             tag = 'NAN'
             time = 'NAN'
             grade = 'NAN'
-            for t in temp :
+            for t in tags :
+                # print(t)
                 t = t.getText().replace('\t','').replace('\n','').replace('\r','')
                 if t.endswith('分') :
                     time = t
 
                 if t.find('級') != -1 :
+
                     grade = t
 
                     # break
@@ -59,7 +61,7 @@ class moviecrawler:
         
         all_posts = list()
         for i in range(page+1):
-            url = self.INDEX + 'year-' + '?page='+str(i)
+            url = self.INDEX + str(year) + '?page='+str(i)
             posts = self.get_posts_list(url)
             all_posts += posts
 
@@ -74,7 +76,7 @@ class moviecrawler:
 
 if __name__ == '__main__':
     
-    mycrawler = moviecrawler(1, 2017,INDEX)
+    mycrawler = moviecrawler(2, 2017,INDEX)
     # start = time.time()
     data = mycrawler.run()
-    # print(data)
+    print(data)
