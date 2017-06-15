@@ -60,7 +60,7 @@ class moviecrawler:
     def get_data(self, year, page):
         
         all_posts = list()
-        for i in range(page+1):
+        for i in range(1, page+1):
             url = self.INDEX + str(year) + '?page='+str(i)
             posts = self.get_posts_list(url)
             all_posts += posts
@@ -76,7 +76,9 @@ class moviecrawler:
 
 if __name__ == '__main__':
     
-    mycrawler = moviecrawler(2, 2017,INDEX)
+    mycrawler = moviecrawler(5, 2017,INDEX)
     # start = time.time()
     data = mycrawler.run()
-    print(data)
+    for d in data:
+        
+        print(d)
