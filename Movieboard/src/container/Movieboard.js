@@ -5,10 +5,12 @@ import {
   AppRegistry,
   Image,
   ListView,
+  ScrollView,
   Text,
   View,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TextInput
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -16,7 +18,7 @@ import { styles } from "../style/base.js"
 
 
 
-var REQUEST_URL = 'https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json';
+var REQUEST_URL = 'http://104.198.249.209:3000/api/movie';
 
 class Movieboard extends Component {
   constructor(props) {
@@ -27,22 +29,42 @@ class Movieboard extends Component {
       }),
       data:[],
       loaded: false,
-      selects : [] 
+      selects : [],
+      page : 0,
+      search : ''
     };
   }
 
   componentDidMount() {
     this.fetchData();
   }
+  handleSearch(){
+    fetch(REQUEST_URL+"/?title="+ this.state.search )
+      .then((res) => res.json())
+      .then((res) =>{ 
+          if (res.length === 0)
+            console.log('haha')
+          else
+             Actions.singlemovie({data : res[0]}); 
+        })
+
+  }
 
   fetchData() {
-    fetch(REQUEST_URL)
+    const {page} = this.state;
+    console.log(page);
+    fetch(REQUEST_URL+"/?start=" + page.toString() + '&end=' + (page +20).toString() )
       .then((res) => res.json())
       .then((res) => {
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(res.movies),
-          loaded: true,
-          data: res
+          data: this.state.data.concat(res)
+        });
+      })
+      .then(()=>{
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(this.state.data),
+            loaded: true,
+            page :page+20
         });
       })
       .done();
@@ -55,12 +77,30 @@ class Movieboard extends Component {
     }
 
     return (
-      <View style={{marginTop: 32}}>
+      <View style={{marginTop: 50}}>
+        <View style = {styles.movieboard.searchbar}>
+          <View style = {{flex:1, flexDirection : 'row', alignItems: 'center'}}>
+            <TouchableHighlight onPress={this.handleSearch.bind(this)}>
+            <Image 
+              source={{uri:  "https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-512.png"}}
+              style={styles.movieboard.searchiocn} />
+            </TouchableHighlight>
+              <TextInput
+                style={{flex :1}}
+                placeholder="輸入電影名稱"
+                onChangeText={(search) => this.setState({search})}
+                value={this.state.text}
+              />
+          </View>
+        </View>
+        <ScrollView onScroll={this.handleScroll.bind(this)} scrollEventThrottle={16} >
         <ListView 
           dataSource={this.state.dataSource}
           renderRow={this.renderMovie.bind(this)}
           style={styles.movieboard.listView}
         />
+        </ScrollView>
+
       </View>
     );
   }
@@ -74,45 +114,41 @@ class Movieboard extends Component {
       </View>
     );
   }
-  _onPressButton(rowID) {
-    const {movies} = this.state.data;
-
-     Actions.singlemovie({text: rowID, data : movies[rowID]}); 
+  handlePress(rowID) {
+     const {data} = this.state;
+     Actions.singlemovie({text: rowID, data : data[rowID]}); 
   }
-
+  handleScroll(event) {
+    const {page} = this.state;
+    if (event.nativeEvent.contentOffset.y >= 32 * page ){
+       this.fetchData();
+    }
+  }
   renderMovie(rowData, sectionID, rowID,) {
     const { selects }= this.state;
 
     return (
-        <TouchableHighlight style = {styles.movieboard.rowStyle}  onPress = {() => this._onPressButton(rowID)}>
+        <TouchableHighlight underlayColor = {'#DDDDDD'}  onPress = {() => this.handlePress(rowID)}>
           <View style={styles.movieboard.container} >
             <Image
-              source={{uri: rowData.posters.thumbnail}}
-              style={styles.movieboard.thumbnail}
+              source={{uri: rowData.Img}}
+              style={styles.movieboard.img}
             />
             <View style={styles.movieboard.rightContainer}>
-              <Text style={styles.movieboard.title}>{rowData.title}</Text>
-              <Text style={styles.movieboard.year}>{rowData.year}</Text>
+              <View style={styles.movieboard.title}>
+                <Text style = {{ fontSize : 16}}>{rowData.Movietitle}</Text>
+              </View>
+              <View style={styles.movieboard.subtitle}>
+                <Text style={styles.movieboard.block}>{rowData.Grade}</Text>
+              </View>
+          
             </View>
           </View>
       </TouchableHighlight>
     );
   }
 
-  /*renderMovie(movie, sectionID, rowID) {
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{uri: movie.posters.thumbnail}}
-          style={styles.thumbnail}
-        />
-        <View style={styles.rightContainer}>
-          <Text style={styles.title}>{movie.title}</Text>
-          <Text style={styles.year}>{movie.year}</Text>
-        </View>
-      </View>
-    );
-  }*/
+
 }
 
 

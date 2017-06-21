@@ -24,25 +24,27 @@ class moviecrawler:
         data = list()
         for movie in soup.find_all('div', 'mmMdbModelOut'):
             title = movie.find('div', 'mdbTitle').find('h2').getText().replace(' ','')
-            temp = movie.find('div', 'mainBread')
-            tags = movie.find('div', 'mainBread').find_all('a')
+            temp = movie.find('div', 'mainBread').find_all('p')
             img = movie.find('div', 'mainIntrol').find('img')['src']
-            
+            try :
+                date  =  movie.find('span', 'soon').getText().split('\t')[1]
+                date  = date.split('\r')[0]
+            except:
+                date = 'NAN'
             try :
                 rate = movie.find('div', 'introRate').find('span').getText().replace('\t','').replace('\n','').replace('\r','')
             except:
                 rate = 'NAN'
+            if rate == '?' :
+                rate = 'NAN'
             tag = 'NAN'
             time = 'NAN'
             grade = 'NAN'
-            for t in tags :
-                # print(t)
+            for t in temp :
                 t = t.getText().replace('\t','').replace('\n','').replace('\r','')
                 if t.endswith('分') :
                     time = t
-
                 if t.find('級') != -1 :
-
                     grade = t
 
                     # break
@@ -51,7 +53,8 @@ class moviecrawler:
                 'Img': img,
                 "Grade" : grade,
                 'Time': time,
-                'Rate': rate
+                'Rate': float(rate),
+                'date' : date
             })
 
 

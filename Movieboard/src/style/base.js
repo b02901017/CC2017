@@ -14,40 +14,58 @@ const styles = {
     },
     rightContainer: {
       flex: 1,
+      alignItems:'center',
+      flexDirection:'column',
+      borderBottomColor : '#DDDDDD',
+      borderBottomWidth : 1
     },
     title: {
-      fontSize: 16,
-      marginBottom: 8,
-      textAlign: 'center',
+      marginTop : 8,
+      flex:1,
     },
-    year: {
+    subtitle: {
+      flex: 1,
+      justifyContent :'space-between',
+      flexDirection: 'row',
+    },
+    block :{
       fontSize: 12,
-      textAlign: 'center',
+      flex : 1,
+      textAlign:'center'
     },
-    thumbnail: {
-      width: 40,
-      height: 62,
+    img: {
+      width: 50,
+      height: 75,
     },
     listView: {
-      paddingTop: 20,
-      backgroundColor: '#F5FCFF',
+      paddingTop: 5,
     },
+    searchbar :{
+      height : 50,
+      borderColor : "#DDDDDD",
+      borderWidth : 1
+    },
+    searchiocn :{
+       width: 50,
+       height: 50,
+
+    }
   },
   singlemovie : {
-    
-
     title: {
-      fontSize: 14,
-      margin: 8,
+      fontSize: 20,
+      flex: 1,
+      margin:8,
       textAlign: 'left',
-      marginLeft : 30
+      marginLeft : 15,
+      borderBottomColor : '#DDDDDD',
+      borderBottomWidth : 1
     },
     text: {
       fontSize: 12,
       textAlign: 'left',
-      margin : 2,
-      marginLeft : 40
-
+      marginLeft : 20,
+      flex:1
     },
     cast: {
       margin:1,
@@ -55,6 +73,31 @@ const styles = {
       textAlign: 'left',
       marginLeft : 55
     },
+    listitem :{
+      height : 25,
+      flex : 1,
+      flexDirection:'row',
+      marginLeft : 15
+    },
+    listblock1:{
+      flex : 1,
+      fontSize : 12,
+      textAlign:'left'
+    },
+    listblock5:{
+      flex : 5,
+      fontSize : 12,
+      textAlign:'left'
+    },
+    listView: {
+      paddingTop: 8,
+    },
+    logtitle :{
+      height:25, 
+      paddingBottom : 7,
+      borderBottomColor : '#DDDDDD', 
+      borderBottomWidth : 1
+    }
     
 
   }
