@@ -37,7 +37,7 @@ class SinglemoviePage extends Component {
         const {page} = this.state;
         const {Movietitle} = this.props.data;
         console.log(Movietitle);
-        fetch(REQUEST_URL+"/?title=" + Movietitle + '&start=' + page.toString() + '&end=' + (page +20).toString() )
+        fetch(REQUEST_URL+"/?title=" + Movietitle + '&start=' + page.toString() + '&end=' + (page +10).toString() )
         .then((res) => res.json())
         .then((res) => {
             this.setState({
@@ -48,14 +48,14 @@ class SinglemoviePage extends Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(this.state.data),
                 loaded: true,
-                page : page +20
+                page : page +10
             });
         })
         .done();
     }
     handleScroll(event) {
         const {page} = this.state;
-        if (event.nativeEvent.contentOffset.y >= 10 * page ){
+        if (event.nativeEvent.contentOffset.y >= 100 * page ){
             this.fetchData();
         }
     }
@@ -79,7 +79,7 @@ class SinglemoviePage extends Component {
                     </View>
                     <View style= {{flex : 1, flexDirection : 'row'}}>
                         <Text style={styles.singlemovie.text}>分級</Text>
-                        <Text style={styles.singlemovie.text}>{data.Date}</Text>
+                        <Text style={styles.singlemovie.text}>{data.Grade}</Text>
                         <Text style={styles.singlemovie.text}>狀態</Text>
                         <Text style={styles.singlemovie.text}>上映中</Text>
                     </View>
